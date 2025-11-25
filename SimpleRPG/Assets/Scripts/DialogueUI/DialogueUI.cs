@@ -6,11 +6,25 @@ using UnityEngine.UI;
 
 public class DialogueUI : MonoBehaviour
 {
+    public static DialogueUI Instance { get; private set; }
+
     public List<string> ContentList;
     private TextMeshProUGUI nameText;
     private TextMeshProUGUI ContentText;
     private Button continueButton;
     private int contentIndex = 0;
+
+    public void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void Start()
     {
@@ -18,6 +32,7 @@ public class DialogueUI : MonoBehaviour
         ContentText = transform.Find("ContentText").GetComponent<TextMeshProUGUI>();
         continueButton = transform.Find("ContinueButton").GetComponent<Button>();
         continueButton.onClick.AddListener(OnContinueButtonClick);
+        Hide();
     }
     public void Show()
     {
@@ -29,6 +44,7 @@ public class DialogueUI : MonoBehaviour
         nameText.text = name;
         ContentList = new List<string>(content);
         ContentText.text = ContentList[0];
+        gameObject.SetActive(true);
     }
 
     public void Hide()
